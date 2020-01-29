@@ -4,6 +4,7 @@ dataDict = {'fnamn': None, 'enamn': None, 'email': None}
 lineList = []
 people = []
 
+
 def ReadOriginalFile(filename):
     with open (filename, "r", encoding="utf-8") as currentFile:
             for line in currentFile:
@@ -19,17 +20,14 @@ def ReadOriginalFile(filename):
         print(person)
     return people
 
-def SaveAsJson(filename, data):
-    try:
-        with open (filename, "w", encoding="utf-8") as jsonFile:
-            json.dump(data, jsonFile, indent=2, ensure_ascii=False)
-    except:
-        print("Något gick fel")
-
 def ReadJson(filename):
-    with open (filename, "r", encoding="utf-8") as jsonFile:
-        for line in jsonFile:
-            print(line)
+    try:
+        with open (filename, "r", encoding="utf-8") as jsonFile:
+            people = json.load(jsonFile)
+            for person in people:
+                print(person)
+    except json.decoder.JSONDecodeError:
+        print("Din fil är tom")
 
 def AddPerson():
     with open("lista personer.json", "r", encoding="utf-8") as jsonFile:
@@ -41,17 +39,28 @@ def AddPerson():
     return people
 
 def DeletePerson():
-    person = json.loads(open ("lista personer.json", "r"))
-    for person in people:
-        if ["fnamn"] == input("Ange förnamn för att ta bort: "):
-            person.remove["fnamn", "enamn", "email"]
-        break
+    with open("lista personer.json", "r", encoding="utf-8") as jsonFile:
+        people = json.load(jsonFile)
+        personToDelete = input("Ange förnamn: ")
+        people = [person for person in people if person['fnamn'] != personToDelete]
     return people
+
+def SaveAsJson(filename, data):
+    while True:
+        if len(data) == 0:
+            print("Du har inget att spara")
+            break
+        else:
+            with open (filename, "w", encoding="utf-8") as jsonFile:
+                json.dump(data, jsonFile, ensure_ascii=False)
+                print("Sparat!")
+                break
 
 def UserInputInt():
     while True:
         try:
             x = int(input("Ange en siffra: "))
+            print("\n")
             break
         except:
             print("Error, inte giltig siffra, försök igen")
