@@ -4,7 +4,7 @@ import modules
 
 while True:
     print("1. Läs in originalfil")
-    print("2. Visa json-data")
+    print("2. Visa json-datat")
     print("3. Lägg till person")
     print("4. Ta bort person")
     print("5. Spara fil")
