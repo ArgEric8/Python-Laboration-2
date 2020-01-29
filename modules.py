@@ -31,7 +31,11 @@ def ReadJson(filename):
 
 def AddPerson():
     with open("lista personer.json", "r", encoding="utf-8") as jsonFile:
-        people = json.load(jsonFile)
+        try:
+            people = json.load(jsonFile)
+        except json.decoder.JSONDecodeError:
+            print("Din fil är tom")
+            people = []
         dataDict["fnamn"] = input("Ange förnamn: ")
         dataDict["enamn"] = input("Ange efternamn: ")
         dataDict["email"] = input("Ange email: ")
@@ -47,13 +51,13 @@ def DeletePerson():
 
 def SaveAsJson(filename, data):
     while True:
-        if len(data) == 0:
-            print("Du har inget att spara")
-            break
-        else:
-            with open (filename, "w", encoding="utf-8") as jsonFile:
+        with open (filename, "w", encoding="utf-8") as jsonFile:
+            if len(data) > 0:
                 json.dump(data, jsonFile, ensure_ascii=False)
                 print("Sparat!")
+                break
+            else:
+                print("Du har inget att spara")
                 break
 
 def UserInputInt():

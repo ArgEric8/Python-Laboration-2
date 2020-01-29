@@ -3,7 +3,7 @@ import modules
 data = []
 
 while True:
-    print("1. Läs in originalfil")
+    print("\n1. Läs in originalfil")
     print("2. Visa json-data")
     print("3. Lägg till person")
     print("4. Ta bort person")
