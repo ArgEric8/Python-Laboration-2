@@ -1,11 +1,12 @@
 import json
 
 dataDict = {'fnamn': None, 'enamn': None, 'email': None}
-people = []
-
+global fileUpdated
+fileUpdated = False
 
 def ReadOriginalFile(filename):
     lineList = []
+    people = []
     with open (filename, "r", encoding="utf-8") as currentFile:
             for line in currentFile:
                 lineList = line.rstrip("\n").split(";")
@@ -48,17 +49,19 @@ def DeletePerson(filename):
         personToDelete = input("Ange förnamn: ")
         if personToDelete == "alla":
             people = []
+            global fileUpdated
+            fileUpdated = True
         else:
             people = [person for person in people if person['fnamn'] != personToDelete]
     return people
 
 def SaveAsJson(filename, data):
-    with open (filename, "w", encoding="utf-8") as jsonFile:
-        json.dump(data, jsonFile, ensure_ascii=False)
-        if len(data) > 0:
-            print("- Sparat!")
-        else:
-            print("- Du har inget att spara")
+    if len(data) > 0 or fileUpdated == True:
+        with open (filename, "w", encoding="utf-8") as jsonFile:
+            json.dump(data, jsonFile, ensure_ascii=False)
+        print("- Sparat!")
+    else:
+        print("- Du har inget att spara")
 
 def UserInputInt():
     while True:
@@ -68,3 +71,4 @@ def UserInputInt():
         except:
             print("Error, inte giltig siffra, försök igen")
     return x
+
