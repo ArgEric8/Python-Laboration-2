@@ -1,11 +1,11 @@
 import json
 
 dataDict = {'fnamn': None, 'enamn': None, 'email': None}
-lineList = []
 people = []
 
 
 def ReadOriginalFile(filename):
+    lineList = []
     with open (filename, "r", encoding="utf-8") as currentFile:
             for line in currentFile:
                 lineList = line.rstrip("\n").split(";")
@@ -29,8 +29,8 @@ def ReadJson(filename):
     except json.decoder.JSONDecodeError:
         print("Din fil är tom")
 
-def AddPerson():
-    with open("lista personer.json", "r", encoding="utf-8") as jsonFile:
+def AddPerson(filename):
+    with open(filename, "r", encoding="utf-8") as jsonFile:
         try:
             people = json.load(jsonFile)
         except json.decoder.JSONDecodeError:
@@ -42,31 +42,29 @@ def AddPerson():
         people.append(dataDict)
     return people
 
-def DeletePerson():
-    with open("lista personer.json", "r", encoding="utf-8") as jsonFile:
+def DeletePerson(filename):
+    with open(filename, "r", encoding="utf-8") as jsonFile:
         people = json.load(jsonFile)
         personToDelete = input("Ange förnamn: ")
-        people = [person for person in people if person['fnamn'] != personToDelete]
+        if personToDelete == "alla":
+            people = []
+        else:
+            people = [person for person in people if person['fnamn'] != personToDelete]
     return people
 
 def SaveAsJson(filename, data):
-    while True:
-        with open (filename, "w", encoding="utf-8") as jsonFile:
-            if len(data) > 0:
-                json.dump(data, jsonFile, ensure_ascii=False)
-                print("Sparat!")
-                break
-            else:
-                print("Du har inget att spara")
-                break
+    with open (filename, "w", encoding="utf-8") as jsonFile:
+        json.dump(data, jsonFile, ensure_ascii=False)
+        if len(data) > 0:
+            print("- Sparat!")
+        else:
+            print("- Du har inget att spara")
 
 def UserInputInt():
     while True:
         try:
-            x = int(input("Ange en siffra: "))
-            print("\n")
+            x = int(input("Ange en siffra: ")) 
             break
         except:
             print("Error, inte giltig siffra, försök igen")
     return x
-
